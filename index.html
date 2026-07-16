@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Битва за рынок — простое ТЗ по графике</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --ground:#F6F7F9; --paper:#FFFFFF; --ink:#0A0E14; --muted:#5B6472;
+    --hair:#E4E7EC; --accent:#0A84FF; --accent-ink:#0A6FE0;
+    --red:#FF3B30; --green:#27B24B; --amber:#FFC53D; --purple:#7B61FF;
+    --shadow:0 1px 2px rgba(10,14,20,.04),0 12px 40px rgba(10,14,20,.08);
+    --shadow-lg:0 2px 6px rgba(10,14,20,.06),0 30px 80px rgba(10,14,20,.12);
+    --r:18px;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono","Menlo",monospace;
+    --maxw:920px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{--ground:#0B0D10;--paper:#15181D;--ink:#F4F6F9;--muted:#98A2B3;--hair:#242A31;--accent:#409CFF;--accent-ink:#5EAEFF;--green:#3FD267;--amber:#FFD65A;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.5);--shadow-lg:0 2px 6px rgba(0,0,0,.5),0 30px 80px rgba(0,0,0,.6);}
+  }
+  :root[data-theme="light"]{--ground:#F6F7F9;--paper:#FFFFFF;--ink:#0A0E14;--muted:#5B6472;--hair:#E4E7EC;--accent:#0A84FF;--accent-ink:#0A6FE0;--green:#27B24B;--amber:#FFC53D;
+    --shadow:0 1px 2px rgba(10,14,20,.04),0 12px 40px rgba(10,14,20,.08);--shadow-lg:0 2px 6px rgba(10,14,20,.06),0 30px 80px rgba(10,14,20,.12);}
+  :root[data-theme="dark"]{--ground:#0B0D10;--paper:#15181D;--ink:#F4F6F9;--muted:#98A2B3;--hair:#242A31;--accent:#409CFF;--accent-ink:#5EAEFF;--green:#3FD267;--amber:#FFD65A;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.5);--shadow-lg:0 2px 6px rgba(0,0,0,.5),0 30px 80px rgba(0,0,0,.6);}
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.011em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  section{padding:64px 0;border-bottom:1px solid var(--hair)}
+  @media(max-width:640px){section{padding:44px 0}}
+  h1,h2,h3{letter-spacing:-.03em;line-height:1.08;margin:0;text-wrap:balance}
+  h2{font-size:clamp(26px,4.2vw,38px);font-weight:800}
+  h3{font-size:clamp(19px,2.4vw,23px);font-weight:750;letter-spacing:-.02em}
+  p{font-size:17.5px;color:var(--ink);max-width:60ch}
+  .muted{color:var(--muted)}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:16px;flex-shrink:0}
+
+  /* HERO */
+  .hero{padding:88px 0 60px;background:radial-gradient(120% 90% at 82% -10%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%),var(--ground);border-bottom:1px solid var(--hair)}
+  .hero .kick{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+  .hero h1{font-size:clamp(34px,7vw,64px);font-weight:850;letter-spacing:-.04em;margin:16px 0 0;line-height:1}
+  .hero p{font-size:20px;margin-top:20px;max-width:44ch;color:var(--muted)}
+  .hero .big-note{margin-top:28px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow);font-size:16.5px;max-width:52ch}
+  .hero .big-note b{color:var(--accent-ink)}
+
+  /* intro line */
+  .intro{font-size:20px;line-height:1.6;max-width:56ch}
+  .intro b{font-weight:750}
+
+  /* rule blocks */
+  .rule{display:flex;gap:18px;padding:26px 0;border-bottom:1px solid var(--hair)}
+  .rule:last-child{border-bottom:none}
+  .rule .txt h3{margin-bottom:8px}
+  .rule .txt p{font-size:16.5px;color:var(--muted);margin:0}
+  .rule .txt .why{margin-top:10px;font-size:15px;color:var(--ink);background:var(--ground);border-left:3px solid var(--accent);padding:9px 14px;border-radius:0 10px 10px 0;display:inline-block}
+
+  /* two modes */
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  @media(max-width:680px){.modes{grid-template-columns:1fr}}
+  .mode{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
+  .mode .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .mode.a .tag{color:var(--accent-ink)} .mode.b .tag{color:var(--purple)}
+  .mode h3{margin:10px 0 10px}
+  .mode p{font-size:16px;color:var(--muted);margin:0 0 14px}
+  .mode ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+  .mode li{font-size:15.5px;padding-left:22px;position:relative;line-height:1.4}
+  .mode li::before{content:"";position:absolute;left:2px;top:8px;width:8px;height:8px;border-radius:50%}
+  .mode.a li::before{background:var(--accent)} .mode.b li::before{background:var(--purple)}
+
+  /* MOVEMENT: robot vs alive */
+  .move-demo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+  @media(max-width:680px){.move-demo{grid-template-columns:1fr}}
+  .md{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+  .md.bad{border-color:color-mix(in srgb,var(--red) 40%,var(--hair))}
+  .md.good{border-color:color-mix(in srgb,var(--green) 40%,var(--hair))}
+  .md .h{font-size:15px;font-weight:750;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .md.bad .h{color:var(--red)} .md.good .h{color:var(--green)}
+  .md .sub{font-size:14.5px;color:var(--muted);margin-bottom:16px}
+  .track{position:relative;height:12px;background:var(--ground);border-radius:8px;border:1px solid var(--hair);overflow:hidden}
+  .track i{position:absolute;top:50%;left:0;width:18px;height:18px;margin-top:-9px;border-radius:50%;background:var(--accent)}
+  .track.linear i{animation:run 2.6s linear infinite}
+  .track.alive i{animation:run 2.6s cubic-bezier(.22,1,.36,1) infinite}
+  @keyframes run{0%{left:0}44%,56%{left:calc(100% - 18px)}100%{left:0}}
+  .md .verdict{margin-top:14px;font-size:14.5px}
+  .md.bad .verdict{color:var(--red)} .md.good .verdict{color:var(--green)}
+
+  /* colors */
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .col{background:var(--paper);border:1px solid var(--hair);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  .col .sw{height:64px}
+  .col .info{padding:12px 14px}
+  .col .info b{display:block;font-size:15px}
+  .col .info span{font-size:14px;color:var(--muted)}
+
+  /* checklist */
+  .check{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .check .row{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--hair);align-items:flex-start}
+  .check .row:last-child{border-bottom:none}
+  .check .ic{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff}
+  .check .ic.y{background:var(--green)} .check .ic.n{background:var(--red)}
+  .check .row .t{font-size:16px;line-height:1.4}
+
+  /* copy box */
+  .copybox{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);padding:8px}
+  .copybox .top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
+  .copybox .top span{font-size:13px;font-weight:600;color:var(--muted)}
+  .copybox button{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:8px 16px;font-size:13px;font-weight:650;cursor:pointer;font-family:var(--sans)}
+  .copybox button:active{transform:scale(.97)}
+  .copybox pre{margin:0;padding:16px 18px;background:var(--ground);border-radius:12px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
+
+  footer{padding:44px 0 72px;color:var(--muted);font-size:14px}
+  footer a{color:var(--accent-ink)}
+
+  .toggle{position:fixed;top:14px;right:14px;z-index:50;background:var(--paper);border:1px solid var(--hair);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);font-family:var(--sans)}
+  .toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){.track i{animation-duration:.001s!important}}
+</style>
+</head>
+<body>
+
+<button class="toggle" id="tg" aria-label="Тема">Тема: авто</button>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kick">Битва за рынок · инструкция по графике для монтажёра</div>
+    <h1>Как должна выглядеть графика в роликах</h1>
+    <p>Без сложных слов. Открой, прочитай сверху вниз — и делай так же.</p>
+    <div class="big-note">За 10 секунд весь смысл: <b>чисто, крупно, много пустого места</b>, и <b>всё двигается плавно</b> — как в рекламе Apple. Не пёстро и не дёргано.</div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="intro">Наш канал — про войны за рынок. Значит и картинка должна быть <b>дорогой и спокойной</b>, а не пёстрой. Мы берём чистоту, как у канала <b>Droider</b>, и добавляем понятную инфографику (цифры, карты, сравнения), как у <b>Послезавтра</b> — но без кислотных цветов.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:8px">7 простых правил</h2>
+    <p class="muted" style="margin-bottom:12px">Если сомневаешься — вернись сюда.</p>
+
+    <div class="rule">
+      <span class="num">1</span>
+      <div class="txt">
+        <h3>Одна мысль на экран</h3>
+        <p>В каждый момент на экране что-то одно: одна цифра, одна фраза или один график. Не вали всё в кучу.</p>
+        <span class="why">Почему: перегруженный кадр выглядит дёшево, зритель не понимает, куда смотреть.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">2</span>
+      <div class="txt">
+        <h3>Много пустого места</h3>
+        <p>Оставляй воздух вокруг. Пусть цифра или текст «дышат», не прижимай к краям.</p>
+        <span class="why">Почему: пустота = ощущение дорогого. Так делает Apple.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">3</span>
+      <div class="txt">
+        <h3>Цифры — крупно</h3>
+        <p>Главное число делай большим, во весь экран. Оно — герой кадра, а не мелкая подпись в углу.</p>
+        <span class="why">Почему: крупная цифра сразу цепляет и запоминается.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">4</span>
+      <div class="txt">
+        <h3>Один яркий цвет за раз</h3>
+        <p>На кадре максимум 2–3 цвета. Ярким выделяем только самое важное — остальное серое или чёрно-белое.</p>
+        <span class="why">Почему: если всё яркое — не выделяется ничего.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">5</span>
+      <div class="txt">
+        <h3>Всё двигается плавно</h3>
+        <p>Никаких резких «скачков». Элементы плавно появляются и мягко останавливаются. Подробнее — в разделе ниже про движение.</p>
+        <span class="why">Почему: плавность = дорого, дёрганость = дёшево.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">6</span>
+      <div class="txt">
+        <h3>Один шрифт</h3>
+        <p>Везде один и тот же жирный шрифт (SF Pro или бесплатный Inter). Не смешивай разные, не бери рукописные в основной текст.</p>
+        <span class="why">Почему: один шрифт = всё смотрится как одна система.</span>
+      </div>
+    </div>
+
+    <div class="rule">
+      <span class="num">7</span>
+      <div class="txt">
+        <h3>Цвет означает смысл</h3>
+        <p>Синий — победитель/главное. Зелёный — рост, хорошо. Красный — падение, проигравший. Не крась просто «для красоты».</p>
+        <span class="why">Почему: зритель считывает смысл без слов.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:10px">Про движение: «робот» против «живого»</h2>
+    <p class="muted" style="margin-bottom:8px">Это правило №5 подробнее. Посмотри на две точки ниже — они бегают по-разному.</p>
+    <div class="move-demo">
+      <div class="md bad">
+        <div class="h">✕ Так НЕ надо — «робот»</div>
+        <div class="sub">Точка едет с одной скоростью и резко встаёт. Как конвейер.</div>
+        <div class="track linear"><i></i></div>
+        <div class="verdict">Выглядит дёшево и неживо. Это называется «linear» — запрещаем.</div>
+      </div>
+      <div class="md good">
+        <div class="h">✓ Так надо — «живое»</div>
+        <div class="sub">Точка разгоняется и мягко тормозит. Как машина у светофора.</div>
+        <div class="track alive"><i></i></div>
+        <div class="verdict">Выглядит дорого и плавно. Всё движение в роликах — только такое.</div>
+      </div>
+    </div>
+    <p class="muted" style="margin-top:18px;font-size:16px">Одна фраза для монтажёра: <b style="color:var(--ink)">«Никакого linear. Всё появляется с разгоном и мягко тормозит».</b> В профессиональных программах (After Effects, Premiere) это делается кнопкой «Easy Ease» или пресетом — монтажёр знает.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:8px">Два режима картинки</h2>
+    <p class="muted" style="margin-bottom:18px">Канал живёт в двух состояниях. Меняется только плотность — правила и шрифт те же.</p>
+    <div class="modes">
+      <div class="mode a">
+        <div class="tag">Режим 1 · чаще всего</div>
+        <h3>Когда говорим мысль или цифру</h3>
+        <p>Пусто, крупно, спокойно. Так выглядит бóльшая часть ролика.</p>
+        <ul>
+          <li>Чистый белый или тёмный фон</li>
+          <li>Огромная цифра или короткая фраза</li>
+          <li>Один яркий блок как акцент</li>
+          <li>Тонкие подписи-выноски (например «5 GW · 4 км»)</li>
+        </ul>
+      </div>
+      <div class="mode b">
+        <div class="tag">Режим 2 · когда показываем данные</div>
+        <h3>Когда сравниваем или показываем карту</h3>
+        <p>Плотнее и ярче — но по правилам. Здесь можно цветные плашки.</p>
+        <ul>
+          <li>Цифра в цветной «наклейке» (плашке)</li>
+          <li>Ряд: флаг + столбик + сумма</li>
+          <li>Серая карта, нужная страна закрашена цветом</li>
+          <li>Метки-точки на карте с подписью</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:18px">Цвета</h2>
+    <div class="cols">
+      <div class="col"><div class="sw" style="background:#FFFFFF;border-bottom:1px solid #E4E7EC"></div><div class="info"><b>Белый / тёмный</b><span>фон · #FFFFFF / #0A0E14</span></div></div>
+      <div class="col"><div class="sw" style="background:#0A84FF"></div><div class="info"><b>Синий</b><span>победитель, главное</span></div></div>
+      <div class="col"><div class="sw" style="background:#27B24B"></div><div class="info"><b>Зелёный</b><span>рост, хорошо</span></div></div>
+      <div class="col"><div class="sw" style="background:#FF3B30"></div><div class="info"><b>Красный</b><span>падение, проигравший</span></div></div>
+      <div class="col"><div class="sw" style="background:#FFC53D"></div><div class="info"><b>Жёлтый</b><span>регион на карте</span></div></div>
+      <div class="col"><div class="sw" style="background:#7B61FF"></div><div class="info"><b>Фиолетовый</b><span>метки, нейтральное</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2 style="margin-bottom:18px">Короткий чек-лист «сделал / не сделал»</h2>
+    <div class="check">
+      <div class="row"><span class="ic y">✓</span><div class="t">На экране одна мысль, вокруг много воздуха</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Главная цифра — крупная</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Максимум 2–3 цвета, ярким — только важное</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Всё двигается плавно (с разгоном и мягким торможением)</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Один жирный шрифт везде</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Пять элементов в кадре разом</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Резкие «скачки», движение «робота» (linear)</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Кислотные, пёстрые цвета</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Рукописный шрифт в основной текст</div></div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:none">
+  <div class="wrap">
+    <h2 style="margin-bottom:8px">Технические цифры (для монтажёра)</h2>
+    <p class="muted" style="margin-bottom:16px">Если делаешь сам — вот точные настройки. Нажми «Копировать» и вставь себе.</p>
+    <div class="copybox">
+      <div class="top"><span>Настройки проекта</span><button id="copyBtn">Копировать</button></div>
+      <pre id="specText">Формат: 1920×1080, 25 кадров/сек
+Поля от краёв: не меньше 8% ширины
+Фон (режим 1): белый #FFFFFF или тёмный #0A0E14
+Текст: #0A0E14 (на тёмном — #EAEEF5)
+
+ЦВЕТА ПО СМЫСЛУ
+Синий (главное/победитель): #0A84FF
+Зелёный (рост): #27B24B
+Красный (падение): #FF3B30
+Жёлтый (регион на карте): #FFC53D
+Фиолетовый (метки): #7B61FF
+
+ШРИФТ
+SF Pro или Inter, жирность 800–850
+Цифры — моноширинные (JetBrains Mono), чтобы не прыгали
+
+ДВИЖЕНИЕ (никакого linear!)
+Текст/фразы: Easy Ease, 0,5–0,6 сек
+Столбики/счётчики/карты: 0,8–0,9 сек
+Плашки/метки (лёгкая пружинка): 0,4 сек</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Битва за рынок · простое ТЗ по графике · версия для монтажёра.<br>
+    Основано на разборе роликов Droider (чистота) и Послезавтра (инфографика).
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var btn=document.getElementById('tg'),modes=['auto','light','dark'],i=0;
+    btn.addEventListener('click',function(){
+      i=(i+1)%3;var m=modes[i];
+      if(m==='auto'){document.documentElement.removeAttribute('data-theme');btn.textContent='Тема: авто';}
+      else{document.documentElement.setAttribute('data-theme',m);btn.textContent='Тема: '+(m==='light'?'светлая':'тёмная');}
+    });
+    var cb=document.getElementById('copyBtn');
+    cb.addEventListener('click',function(){
+      var t=document.getElementById('specText').innerText;
+      navigator.clipboard.writeText(t).then(function(){
+        cb.textContent='Скопировано ✓';
+        setTimeout(function(){cb.textContent='Копировать';},1600);
+      }).catch(function(){cb.textContent='Выдели вручную';});
+    });
+  })();
+</script>
+</body>
+</html>
