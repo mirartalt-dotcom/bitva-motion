@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<title>Битва за рынок — простое ТЗ по графике</title>
+<title>Битва за рынок — гайд по графике</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
@@ -14,7 +14,7 @@
     --r:18px;
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     --mono:"SF Mono",ui-monospace,"JetBrains Mono","Menlo",monospace;
-    --maxw:920px;
+    --maxw:1060px;
   }
   @media (prefers-color-scheme:dark){
     :root{--ground:#0B0D10;--paper:#15181D;--ink:#F4F6F9;--muted:#98A2B3;--hair:#242A31;--accent:#409CFF;--accent-ink:#5EAEFF;--green:#3FD267;--amber:#FFD65A;
@@ -26,57 +26,152 @@
     --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 40px rgba(0,0,0,.5);--shadow-lg:0 2px 6px rgba(0,0,0,.5),0 30px 80px rgba(0,0,0,.6);}
 
   *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
   body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;letter-spacing:-.011em}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
-  section{padding:64px 0;border-bottom:1px solid var(--hair)}
-  @media(max-width:640px){section{padding:44px 0}}
+  section{padding:72px 0;border-bottom:1px solid var(--hair)}
+  @media(max-width:640px){section{padding:48px 0}}
   h1,h2,h3{letter-spacing:-.03em;line-height:1.08;margin:0;text-wrap:balance}
-  h2{font-size:clamp(26px,4.2vw,38px);font-weight:800}
-  h3{font-size:clamp(19px,2.4vw,23px);font-weight:750;letter-spacing:-.02em}
-  p{font-size:17.5px;color:var(--ink);max-width:60ch}
+  h2{font-size:clamp(26px,4.2vw,40px);font-weight:800}
+  h3{font-size:clamp(18px,2.3vw,22px);font-weight:750;letter-spacing:-.02em}
+  p{font-size:17px;color:var(--ink);max-width:62ch}
   .muted{color:var(--muted)}
-  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:16px;flex-shrink:0}
+  .lead{font-size:19px}
 
   /* HERO */
-  .hero{padding:88px 0 60px;background:radial-gradient(120% 90% at 82% -10%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%),var(--ground);border-bottom:1px solid var(--hair)}
+  .hero{padding:84px 0 56px;background:radial-gradient(120% 90% at 82% -10%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%),var(--ground);border-bottom:1px solid var(--hair)}
   .hero .kick{font-size:12.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
-  .hero h1{font-size:clamp(34px,7vw,64px);font-weight:850;letter-spacing:-.04em;margin:16px 0 0;line-height:1}
-  .hero p{font-size:20px;margin-top:20px;max-width:44ch;color:var(--muted)}
-  .hero .big-note{margin-top:28px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:20px 22px;box-shadow:var(--shadow);font-size:16.5px;max-width:52ch}
+  .hero h1{font-size:clamp(32px,6.6vw,62px);font-weight:850;letter-spacing:-.04em;margin:16px 0 0;line-height:1}
+  .hero p{font-size:19px;margin-top:18px;max-width:48ch;color:var(--muted)}
+  .hero .big-note{margin-top:26px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:18px 22px;box-shadow:var(--shadow);font-size:16.5px;max-width:56ch}
   .hero .big-note b{color:var(--accent-ink)}
+  .toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+  .toc a{font-size:13px;font-weight:600;color:var(--ink);background:var(--paper);border:1px solid var(--hair);border-radius:999px;padding:7px 14px;text-decoration:none;box-shadow:var(--shadow)}
+  .toc a:hover{border-color:var(--accent)}
 
-  /* intro line */
-  .intro{font-size:20px;line-height:1.6;max-width:56ch}
-  .intro b{font-weight:750}
+  /* EPISODE MAP */
+  .beat{display:flex;gap:16px;align-items:flex-start;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow)}
+  .beats{display:flex;flex-direction:column;gap:12px;counter-reset:beat}
+  .beat .time{flex-shrink:0;font-family:var(--mono);font-size:12px;color:#fff;background:var(--ink);border-radius:8px;padding:6px 10px;font-weight:600;min-width:86px;text-align:center}
+  .beat .bt{flex:1}
+  .beat .bt b{display:block;font-size:16.5px;letter-spacing:-.01em}
+  .beat .bt span{display:block;font-size:14.5px;color:var(--muted);margin-top:3px}
+  .beat .tool{flex-shrink:0;align-self:center;font-size:13px;font-weight:650;color:var(--accent-ink);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:999px;padding:6px 13px;white-space:nowrap}
+  .beat .tool a{color:inherit;text-decoration:none}
+  @media(max-width:680px){.beat{flex-wrap:wrap}.beat .tool{align-self:flex-start}}
 
-  /* rule blocks */
-  .rule{display:flex;gap:18px;padding:26px 0;border-bottom:1px solid var(--hair)}
-  .rule:last-child{border-bottom:none}
-  .rule .txt h3{margin-bottom:8px}
-  .rule .txt p{font-size:16.5px;color:var(--muted);margin:0}
-  .rule .txt .why{margin-top:10px;font-size:15px;color:var(--ink);background:var(--ground);border-left:3px solid var(--accent);padding:9px 14px;border-radius:0 10px 10px 0;display:inline-block}
+  /* GOOD/BAD FRAMES */
+  .gb{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.gb{grid-template-columns:1fr}}
+  .frame{border-radius:var(--r);overflow:hidden;border:1.5px solid var(--hair);box-shadow:var(--shadow);background:var(--paper)}
+  .frame.bad{border-color:color-mix(in srgb,var(--red) 45%,var(--hair))}
+  .frame.good{border-color:color-mix(in srgb,var(--green) 45%,var(--hair))}
+  .frame .lbl{padding:12px 18px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--hair)}
+  .frame.bad .lbl{color:var(--red)} .frame.good .lbl{color:var(--green)}
+  .frame .screen{position:relative;aspect-ratio:16/9;background:#FBFBFC;overflow:hidden}
+  .frame .cap{padding:12px 18px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--hair);line-height:1.45}
 
-  /* two modes */
-  .modes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
-  @media(max-width:680px){.modes{grid-template-columns:1fr}}
-  .mode{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:24px;box-shadow:var(--shadow)}
-  .mode .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-  .mode.a .tag{color:var(--accent-ink)} .mode.b .tag{color:var(--purple)}
-  .mode h3{margin:10px 0 10px}
-  .mode p{font-size:16px;color:var(--muted);margin:0 0 14px}
-  .mode ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
-  .mode li{font-size:15.5px;padding-left:22px;position:relative;line-height:1.4}
-  .mode li::before{content:"";position:absolute;left:2px;top:8px;width:8px;height:8px;border-radius:50%}
-  .mode.a li::before{background:var(--accent)} .mode.b li::before{background:var(--purple)}
+  /* bad frame contents — clutter */
+  .clutter{position:absolute;inset:0;padding:6%}
+  .clutter .t1{font-size:clamp(11px,1.6vw,16px);font-weight:800;color:#0A0E14}
+  .clutter .box{position:absolute;border-radius:6px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:clamp(8px,1.2vw,12px);padding:4px}
+  /* good frame contents */
+  .clean{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+  .clean .big{font-size:clamp(28px,6vw,54px);font-weight:850;letter-spacing:-.04em;color:#0A0E14;font-variant-numeric:tabular-nums}
+  .clean .sub{font-size:clamp(10px,1.6vw,14px);color:#5B6472;font-weight:550}
 
-  /* MOVEMENT: robot vs alive */
+  /* DEMO CARDS (live) */
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px}
+  .mcard{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+  .stage{position:relative;height:240px;overflow:hidden;background:#FBFBFC;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--hair)}
+  .stage.dark{background:#0B0F17}
+  .stage .badge{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--muted);background:color-mix(in srgb,var(--paper) 85%,transparent);padding:3px 8px;border-radius:6px;border:1px solid var(--hair);z-index:3}
+  .stage.dark .badge{color:#8A94A6;background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
+  .mcard .body{padding:18px 22px 22px}
+  .mcard .body h3{margin-bottom:8px}
+  .mcard .body p{font-size:14.5px;margin:0;color:var(--muted)}
+  .mcard .body .when{margin-top:12px;font-size:13.5px;color:var(--ink);background:var(--ground);border-left:3px solid var(--accent);padding:8px 13px;border-radius:0 10px 10px 0;display:block}
+  .mcard .body .when b{color:var(--accent-ink)}
+  .specs{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .spec{font-family:var(--mono);font-size:11px;color:var(--muted);background:var(--ground);border:1px solid var(--hair);border-radius:7px;padding:5px 9px}
+  .spec b{color:var(--accent-ink);font-weight:600}
+
+  /* 1: shock number */
+  .huge{font-size:clamp(60px,14vw,110px);font-weight:850;letter-spacing:-.04em;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.4);font-variant-numeric:tabular-nums;opacity:0;transform:scale(.85);animation:hugeIn 5s cubic-bezier(.22,1,.36,1) infinite}
+  .huge-sub{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:14px;color:#9AA6B8;font-weight:550;opacity:0;animation:fadeIn 5s infinite 1s}
+  @keyframes hugeIn{0%{opacity:0;transform:scale(.85)}16%,84%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
+  @keyframes fadeIn{0%{opacity:0}20%,84%{opacity:1}100%{opacity:0}}
+
+  /* 2: lower third */
+  .l3{position:absolute;left:26px;bottom:30px;text-align:left}
+  .l3 .bar{width:3px;background:var(--accent);border-radius:3px;position:absolute;left:0;top:4px;bottom:4px;transform:scaleY(0);transform-origin:top;animation:barGrow 4.5s infinite}
+  .l3 .txt{padding-left:15px}
+  .l3 .name{font-size:21px;font-weight:750;letter-spacing:-.02em;color:#0A0E14;overflow:hidden}
+  .l3 .name span{display:inline-block;transform:translateY(105%);animation:lineUp 4.5s infinite}
+  .l3 .role{font-size:13px;color:#5B6472;overflow:hidden}
+  .l3 .role span{display:inline-block;transform:translateY(105%);animation:lineUp 4.5s infinite .12s}
+  @keyframes barGrow{0%{transform:scaleY(0)}10%,84%{transform:scaleY(1)}94%,100%{transform:scaleY(0)}}
+  @keyframes lineUp{0%{transform:translateY(105%)}12%,82%{transform:translateY(0)}92%,100%{transform:translateY(105%)}}
+
+  /* 3: market share bars */
+  .cmp{display:flex;align-items:flex-end;gap:26px;height:100%;padding-bottom:34px}
+  .cmp .col{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative}
+  .cmp .plate{color:#fff;font-weight:850;font-size:19px;padding:5px 12px;border-radius:11px 13px 10px 12px;font-variant-numeric:tabular-nums;transform:translateY(14px);opacity:0;animation:tagIn 5s cubic-bezier(.34,1.4,.5,1) infinite}
+  .cmp .tower{width:44px;border-radius:7px 7px 0 0;transform-origin:bottom;transform:scaleY(0);animation:grow 5s cubic-bezier(.22,1,.36,1) infinite}
+  .cmp .nm{position:absolute;bottom:-26px;font-size:12.5px;font-weight:650;color:#5B6472;white-space:nowrap}
+  @keyframes tagIn{0%{opacity:0;transform:translateY(14px) scale(.9)}16%,84%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-8px) scale(.96)}}
+  @keyframes grow{0%{transform:scaleY(0)}20%,84%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+
+  /* 4: map */
+  .mapwrap{position:relative;width:82%;height:170px}
+  .mapwrap svg{width:100%;height:100%}
+  .mapwrap .base{fill:#C4CBD6}
+  .mapwrap .region{fill:var(--amber);opacity:0;animation:regIn 5s cubic-bezier(.22,1,.36,1) infinite}
+  @keyframes regIn{0%{opacity:0}22%,84%{opacity:1}100%{opacity:0}}
+  .mapwrap .pin{opacity:0;transform:translateY(-8px);animation:pinIn 5s cubic-bezier(.34,1.56,.64,1) infinite .45s;transform-box:fill-box;transform-origin:center bottom}
+  .mapwrap .pin2{animation-delay:.65s}
+  @keyframes pinIn{0%{opacity:0;transform:translateY(-8px)}28%,84%{opacity:1;transform:translateY(0)}100%{opacity:0}}
+  .maplabel{position:absolute;background:var(--purple);color:#fff;font-weight:750;font-size:13.5px;padding:5px 11px;border-radius:8px;top:12%;right:4%;opacity:0;animation:fadeIn 5s infinite .55s}
+
+  /* 5: quote */
+  .kq{width:84%;font-size:clamp(19px,3.2vw,27px);font-weight:750;letter-spacing:-.02em;line-height:1.22;text-align:center;color:#EAEEF5}
+  .kq .w{display:inline-block;opacity:0;transform:translateY(13px);animation:wordIn 6s infinite}
+  .kq .em{color:var(--accent)}
+  @keyframes wordIn{0%{opacity:0;transform:translateY(13px)}20%,82%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-8px)}}
+
+  /* 6: versus */
+  .vs{display:flex;width:100%;height:100%;position:relative}
+  .vs .side{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px;opacity:0;animation:vsIn 5s infinite}
+  .vs .side.b2{animation-delay:.22s}
+  .vs .side .lg{font-size:24px;font-weight:800;letter-spacing:-.02em;color:#0A0E14}
+  .vs .side .sm{font-size:12.5px;color:#5B6472}
+  .vs .side.win .lg{color:var(--accent)} .vs .side.lose .lg{color:var(--red)}
+  .vs .divider{position:absolute;left:50%;top:8%;bottom:8%;width:1px;background:#E4E7EC;transform:translateX(-.5px)}
+  .vs .vbadge{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);width:44px;height:44px;border-radius:50%;background:#0A0E14;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;animation:vsBadge 5s infinite;box-shadow:0 8px 30px rgba(10,14,20,.25)}
+  @keyframes vsIn{0%{opacity:0;transform:translateY(12px)}18%,84%{opacity:1;transform:translateY(0)}100%{opacity:0}}
+  @keyframes vsBadge{0%,13%{transform:translate(-50%,-50%) scale(0)}26%,84%{transform:translate(-50%,-50%) scale(1)}100%{transform:translate(-50%,-50%) scale(0)}}
+
+  /* 7: counter */
+  .counter{font-size:clamp(48px,11vw,88px);font-weight:850;letter-spacing:-.045em;color:#0A0E14;font-variant-numeric:tabular-nums;display:flex;align-items:baseline}
+  .counter .unit{font-size:.34em;color:#5B6472;font-weight:650;margin-left:8px}
+  .digits{display:inline-flex;overflow:hidden;height:1em;line-height:1}
+  .digits .reel{display:flex;flex-direction:column;animation:reel 5s cubic-bezier(.22,1,.36,1) infinite}
+  @keyframes reel{0%,8%{transform:translateY(0)}38%,86%{transform:translateY(calc(-1em * 4))}100%{transform:translateY(calc(-1em * 4))}}
+
+  /* 8: chapter wipe */
+  .wipe{position:absolute;inset:0;overflow:hidden}
+  .wipe .a,.wipe .b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .wipe .a{background:#FBFBFC;color:#0A0E14}
+  .wipe .b{background:#0A0E14;color:#fff;clip-path:inset(0 0 0 100%);animation:wipeIn 4.5s cubic-bezier(.76,0,.24,1) infinite}
+  @keyframes wipeIn{0%,12%{clip-path:inset(0 0 0 100%)}36%,76%{clip-path:inset(0 0 0 0%)}94%,100%{clip-path:inset(0 100% 0 0)}}
+
+  /* MOVEMENT */
   .move-demo{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
   @media(max-width:680px){.move-demo{grid-template-columns:1fr}}
-  .md{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+  .md{background:var(--paper);border:1.5px solid var(--hair);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
   .md.bad{border-color:color-mix(in srgb,var(--red) 40%,var(--hair))}
   .md.good{border-color:color-mix(in srgb,var(--green) 40%,var(--hair))}
-  .md .h{font-size:15px;font-weight:750;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+  .md .h{font-size:15px;font-weight:750;margin-bottom:4px}
   .md.bad .h{color:var(--red)} .md.good .h{color:var(--green)}
   .md .sub{font-size:14.5px;color:var(--muted);margin-bottom:16px}
   .track{position:relative;height:12px;background:var(--ground);border-radius:8px;border:1px solid var(--hair);overflow:hidden}
@@ -86,24 +181,27 @@
   @keyframes run{0%{left:0}44%,56%{left:calc(100% - 18px)}100%{left:0}}
   .md .verdict{margin-top:14px;font-size:14.5px}
   .md.bad .verdict{color:var(--red)} .md.good .verdict{color:var(--green)}
+  .ae-note{margin-top:18px;background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow);font-size:15px}
+  .ae-note b{color:var(--accent-ink)}
+  .ae-note .mono{font-family:var(--mono);font-size:13px;background:var(--ground);border:1px solid var(--hair);border-radius:6px;padding:2px 7px}
 
   /* colors */
   .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
   .col{background:var(--paper);border:1px solid var(--hair);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
-  .col .sw{height:64px}
+  .col .sw{height:60px}
   .col .info{padding:12px 14px}
   .col .info b{display:block;font-size:15px}
-  .col .info span{font-size:14px;color:var(--muted)}
+  .col .info span{font-size:13.5px;color:var(--muted)}
 
   /* checklist */
   .check{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
-  .check .row{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--hair);align-items:flex-start}
+  .check .row{display:flex;gap:14px;padding:15px 20px;border-bottom:1px solid var(--hair);align-items:flex-start}
   .check .row:last-child{border-bottom:none}
   .check .ic{flex-shrink:0;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#fff}
   .check .ic.y{background:var(--green)} .check .ic.n{background:var(--red)}
-  .check .row .t{font-size:16px;line-height:1.4}
+  .check .row .t{font-size:15.5px;line-height:1.4}
 
-  /* copy box */
+  /* copybox */
   .copybox{background:var(--paper);border:1px solid var(--hair);border-radius:var(--r);box-shadow:var(--shadow);padding:8px}
   .copybox .top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px}
   .copybox .top span{font-size:13px;font-weight:600;color:var(--muted)}
@@ -112,11 +210,10 @@
   .copybox pre{margin:0;padding:16px 18px;background:var(--ground);border-radius:12px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
 
   footer{padding:44px 0 72px;color:var(--muted);font-size:14px}
-  footer a{color:var(--accent-ink)}
 
   .toggle{position:fixed;top:14px;right:14px;z-index:50;background:var(--paper);border:1px solid var(--hair);color:var(--ink);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);font-family:var(--sans)}
   .toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-  @media (prefers-reduced-motion:reduce){.track i{animation-duration:.001s!important}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-iteration-count:1!important}}
 </style>
 </head>
 <body>
@@ -125,207 +222,305 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="kick">Битва за рынок · инструкция по графике для монтажёра</div>
-    <h1>Как должна выглядеть графика в роликах</h1>
-    <p>Без сложных слов. Открой, прочитай сверху вниз — и делай так же.</p>
-    <div class="big-note">За 10 секунд весь смысл: <b>чисто, крупно, много пустого места</b>, и <b>всё двигается плавно</b> — как в рекламе Apple. Не пёстро и не дёргано.</div>
+    <div class="kick">«Битва за рынок» · гайд по графике и анимации · для монтажёра</div>
+    <h1>Графика выпуска:<br>что, когда и как двигается</h1>
+    <p>Все примеры ниже — живые: они анимируются прямо на странице. Делай так же — и стиль сойдётся.</p>
+    <div class="big-note">Суть в одной фразе: <b>чисто, крупно, много пустого места, всё двигается плавно</b> — как презентация Apple. Канал про войны компаний за рынок, поэтому картинка — дорогая и спокойная, а драму дают цифры и монтаж, не пестрота.</div>
+    <div class="toc">
+      <a href="#map">Карта выпуска</a>
+      <a href="#frames">Плохо / хорошо</a>
+      <a href="#tools">8 приёмов (живые)</a>
+      <a href="#move">Движение</a>
+      <a href="#colors">Цвета</a>
+      <a href="#check">Чек-лист</a>
+      <a href="#specs">Настройки</a>
+    </div>
   </div>
 </header>
 
-<section>
+<section id="map">
   <div class="wrap">
-    <p class="intro">Наш канал — про войны за рынок. Значит и картинка должна быть <b>дорогой и спокойной</b>, а не пёстрой. Мы берём чистоту, как у канала <b>Droider</b>, и добавляем понятную инфографику (цифры, карты, сравнения), как у <b>Послезавтра</b> — но без кислотных цветов.</p>
+    <h2 style="margin-bottom:8px">Карта выпуска: какой приём в какой момент</h2>
+    <p class="muted" style="margin-bottom:22px;font-size:16px">Каждый выпуск — это история войны на рынке. У каждой части истории — свой графический приём. Номер справа — ссылка на живой пример ниже.</p>
+    <div class="beats">
+      <div class="beat"><span class="time">0:00–1:00</span><div class="bt"><b>Хук — шок-цифра</b><span>Одно число, от которого нельзя уйти: «−40% за год», «3 млрд ₽ сгорело»</span></div><span class="tool"><a href="#t1">Приём 1 · Шок-цифра</a></span></div>
+      <div class="beat"><span class="time">1:00–3:00</span><div class="bt"><b>Знакомим с игроками</b><span>Кто воюет: компании, основатели, Артур как участник рынка</span></div><span class="tool"><a href="#t2">Приём 2 · Титр</a></span></div>
+      <div class="beat"><span class="time">середина</span><div class="bt"><b>Расстановка сил</b><span>Кто сколько держит: доли рынка, выручка, точки</span></div><span class="tool"><a href="#t3">Приём 3 · Столбики</a></span></div>
+      <div class="beat"><span class="time">середина</span><div class="bt"><b>География войны</b><span>Куда экспансия: города, регионы, новые точки</span></div><span class="tool"><a href="#t4">Приём 4 · Карта</a></span></div>
+      <div class="beat"><span class="time">повороты</span><div class="bt"><b>Столкновение</b><span>Момент дуэли: два игрока лоб в лоб</span></div><span class="tool"><a href="#t6">Приём 6 · Против</a></span></div>
+      <div class="beat"><span class="time">повороты</span><div class="bt"><b>Динамика</b><span>Как менялись числа во времени: рост, обвал</span></div><span class="tool"><a href="#t7">Приём 7 · Счётчик</a></span></div>
+      <div class="beat"><span class="time">между главами</span><div class="bt"><b>Смена главы</b><span>Новый этап войны — новая глава</span></div><span class="tool"><a href="#t8">Приём 8 · Шторка</a></span></div>
+      <div class="beat"><span class="time">финал</span><div class="bt"><b>Мораль</b><span>Главная мысль выпуска — фраза, которую зритель унесёт с собой</span></div><span class="tool"><a href="#t5">Приём 5 · Цитата</a></span></div>
+    </div>
   </div>
 </section>
 
-<section>
+<section id="frames">
   <div class="wrap">
-    <h2 style="margin-bottom:8px">7 простых правил</h2>
-    <p class="muted" style="margin-bottom:12px">Если сомневаешься — вернись сюда.</p>
-
-    <div class="rule">
-      <span class="num">1</span>
-      <div class="txt">
-        <h3>Одна мысль на экран</h3>
-        <p>В каждый момент на экране что-то одно: одна цифра, одна фраза или один график. Не вали всё в кучу.</p>
-        <span class="why">Почему: перегруженный кадр выглядит дёшево, зритель не понимает, куда смотреть.</span>
+    <h2 style="margin-bottom:8px">Главное правило — на примере кадра</h2>
+    <p class="muted" style="margin-bottom:22px;font-size:16px">Один и тот же факт — «Додо выросла на 37%» — можно показать двумя способами. Разница видна сразу.</p>
+    <div class="gb">
+      <div class="frame bad">
+        <div class="lbl">✕ Так не надо</div>
+        <div class="screen">
+          <div class="clutter">
+            <div class="t1">Рост сети Додо Пицца в 2025 году по регионам</div>
+            <div class="box" style="left:5%;top:26%;width:26%;height:20%;background:#FF3B30">Конкуренты −12%</div>
+            <div class="box" style="left:35%;top:22%;width:24%;height:26%;background:#0A84FF">Додо +37%</div>
+            <div class="box" style="left:63%;top:30%;width:30%;height:18%;background:#27B24B">Выручка 92 млрд</div>
+            <div class="box" style="left:8%;top:56%;width:38%;height:16%;background:#7B61FF">910 пиццерий</div>
+            <div class="box" style="left:52%;top:58%;width:40%;height:22%;background:#FFC53D;color:#3a2c00">Юг России: 9 точек, LFL −3%, план +2</div>
+          </div>
+        </div>
+        <div class="cap">Пять фактов разом, всё яркое, глаз мечется. Зритель не запомнит ничего.</div>
       </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">2</span>
-      <div class="txt">
-        <h3>Много пустого места</h3>
-        <p>Оставляй воздух вокруг. Пусть цифра или текст «дышат», не прижимай к краям.</p>
-        <span class="why">Почему: пустота = ощущение дорогого. Так делает Apple.</span>
-      </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">3</span>
-      <div class="txt">
-        <h3>Цифры — крупно</h3>
-        <p>Главное число делай большим, во весь экран. Оно — герой кадра, а не мелкая подпись в углу.</p>
-        <span class="why">Почему: крупная цифра сразу цепляет и запоминается.</span>
-      </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">4</span>
-      <div class="txt">
-        <h3>Один яркий цвет за раз</h3>
-        <p>На кадре максимум 2–3 цвета. Ярким выделяем только самое важное — остальное серое или чёрно-белое.</p>
-        <span class="why">Почему: если всё яркое — не выделяется ничего.</span>
-      </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">5</span>
-      <div class="txt">
-        <h3>Всё двигается плавно</h3>
-        <p>Никаких резких «скачков». Элементы плавно появляются и мягко останавливаются. Подробнее — в разделе ниже про движение.</p>
-        <span class="why">Почему: плавность = дорого, дёрганость = дёшево.</span>
-      </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">6</span>
-      <div class="txt">
-        <h3>Один шрифт</h3>
-        <p>Везде один и тот же жирный шрифт (SF Pro или бесплатный Inter). Не смешивай разные, не бери рукописные в основной текст.</p>
-        <span class="why">Почему: один шрифт = всё смотрится как одна система.</span>
-      </div>
-    </div>
-
-    <div class="rule">
-      <span class="num">7</span>
-      <div class="txt">
-        <h3>Цвет означает смысл</h3>
-        <p>Синий — победитель/главное. Зелёный — рост, хорошо. Красный — падение, проигравший. Не крась просто «для красоты».</p>
-        <span class="why">Почему: зритель считывает смысл без слов.</span>
+      <div class="frame good">
+        <div class="lbl">✓ Так надо</div>
+        <div class="screen">
+          <div class="clean">
+            <div class="big">+37%</div>
+            <div class="sub">рост Додо за 2025 год</div>
+          </div>
+        </div>
+        <div class="cap">Одна цифра — герой кадра. Остальные факты — следующими кадрами, по одному.</div>
       </div>
     </div>
   </div>
 </section>
 
-<section>
+<section id="tools">
   <div class="wrap">
-    <h2 style="margin-bottom:10px">Про движение: «робот» против «живого»</h2>
-    <p class="muted" style="margin-bottom:8px">Это правило №5 подробнее. Посмотри на две точки ниже — они бегают по-разному.</p>
+    <h2 style="margin-bottom:8px">8 приёмов — все живые, смотри как двигаются</h2>
+    <p class="muted" style="margin-bottom:24px;font-size:16px">Примеры — на материале канала: Додо, конкуренты, юг России. Под каждым — когда применять и параметры движения.</p>
+    <div class="grid2">
+
+      <div class="mcard" id="t1">
+        <div class="stage dark"><span class="badge">1 · ШОК-ЦИФРА</span>
+          <div class="huge">−40%</div>
+          <div class="huge-sub">потерял лидер рынка за один год</div>
+        </div>
+        <div class="body"><h3>Шок-цифра во весь экран</h3>
+          <p>Огромное число поверх тёмного кадра или видео. Появляется с лёгким увеличением, подпись — с задержкой в секунду.</p>
+          <span class="when"><b>Когда:</b> хук в первой минуте, шок-факты на поворотах истории.</span>
+          <div class="specs"><span class="spec">появление <b>0,6 с</b></span><span class="spec">масштаб <b>85%→100%</b></span><span class="spec">подпись через <b>1 с</b></span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t2">
+        <div class="stage"><span class="badge">2 · ТИТР</span>
+          <div class="l3">
+            <div class="bar"></div>
+            <div class="txt">
+              <div class="name"><span>Артур Миракян</span></div>
+              <div class="role"><span>Франчайзи Додо Пицца · 9 пиццерий</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="body"><h3>Титр — кто на экране</h3>
+          <p>Сначала вырастает синяя линия, потом имя и роль выезжают снизу, вторая строка чуть позже первой.</p>
+          <span class="when"><b>Когда:</b> первое появление любого героя: Артур, основатели компаний, эксперты.</span>
+          <div class="specs"><span class="spec">появление <b>0,5 с</b></span><span class="spec">2-я строка через <b>0,12 с</b></span><span class="spec">держать <b>от 3 с</b></span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t3">
+        <div class="stage"><span class="badge">3 · СТОЛБИКИ</span>
+          <div class="cmp">
+            <div class="col"><div class="plate" style="background:var(--accent)">46%</div><div class="tower" style="height:120px;background:var(--accent)"></div><span class="nm">Додо</span></div>
+            <div class="col"><div class="plate" style="background:#8E9AAB;animation-delay:.12s">31%</div><div class="tower" style="height:82px;background:#8E9AAB;animation-delay:.12s"></div><span class="nm">Игрок 2</span></div>
+            <div class="col"><div class="plate" style="background:var(--red);animation-delay:.24s">23%</div><div class="tower" style="height:58px;background:var(--red);animation-delay:.24s"></div><span class="nm">Игрок 3</span></div>
+          </div>
+        </div>
+        <div class="body"><h3>Столбики — расстановка сил</h3>
+          <p>Столбики растут снизу по очереди, значения в плашках выпрыгивают сверху. Лидер — синий, аутсайдер — красный, середина — серая.</p>
+          <span class="when"><b>Когда:</b> доли рынка, выручка игроков, любое «кто сколько держит». Максимум 3–4 столбика, не 30.</span>
+          <div class="specs"><span class="spec">рост <b>0,9 с</b></span><span class="spec">задержка между <b>0,1 с</b></span><span class="spec">цвет = роль</span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t4">
+        <div class="stage"><span class="badge">4 · КАРТА</span>
+          <div class="mapwrap">
+            <svg viewBox="0 0 300 170" preserveAspectRatio="xMidYMid meet">
+              <path class="base" d="M15 45 L85 22 L150 42 L215 26 L285 52 L278 128 L200 148 L115 132 L35 142 Z"/>
+              <path class="region" d="M110 78 L185 68 L215 102 L168 134 L112 122 Z"/>
+              <g class="pin"><circle cx="150" cy="92" r="8" fill="#7B61FF"/><path d="M150 100 L144 111 L156 111 Z" fill="#7B61FF"/></g>
+              <g class="pin pin2"><circle cx="192" cy="106" r="8" fill="#7B61FF"/><path d="M192 114 L186 125 L198 125 Z" fill="#7B61FF"/></g>
+            </svg>
+            <div class="maplabel">Юг России · 9 точек</div>
+          </div>
+        </div>
+        <div class="body"><h3>Карта — география войны</h3>
+          <p>Карта серая, нужный регион заливается жёлтым, города-точки падают сверху с лёгкой пружинкой, подпись всплывает.</p>
+          <span class="when"><b>Когда:</b> экспансия сети, «в каких городах воюют», новые точки. База всегда чёрно-белая — цвет только у смысла.</span>
+          <div class="specs"><span class="spec">заливка <b>0,5 с</b></span><span class="spec">точки <b>0,4 с</b> по очереди</span><span class="spec">база — ч/б</span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t5">
+        <div class="stage dark"><span class="badge">5 · ЦИТАТА</span>
+          <div class="kq">
+            <span class="w">«Рынок</span> <span class="w" style="animation-delay:.15s">не</span> <span class="w em" style="animation-delay:.3s">прощает</span> <span class="w" style="animation-delay:.45s">медленных»</span>
+          </div>
+        </div>
+        <div class="body"><h3>Цитата — мораль выпуска</h3>
+          <p>Фраза появляется по словам, ключевое слово — синим. Тёмный фон, ничего больше в кадре.</p>
+          <span class="when"><b>Когда:</b> финал выпуска, главная мысль. Одна такая фраза на выпуск — иначе обесценится.</span>
+          <div class="specs"><span class="spec">слово <b>0,4 с</b></span><span class="spec">между словами <b>0,15 с</b></span><span class="spec">1 раз за выпуск</span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t6">
+        <div class="stage"><span class="badge">6 · ПРОТИВ</span>
+          <div class="vs">
+            <div class="divider"></div>
+            <div class="side win"><div class="lg">Додо</div><div class="sm">+120 точек за год</div></div>
+            <div class="side b2 lose"><div class="lg">Конкурент</div><div class="sm">ушёл с рынка</div></div>
+            <div class="vbadge">VS</div>
+          </div>
+        </div>
+        <div class="body"><h3>Экран «против»</h3>
+          <p>Экран делится пополам, стороны въезжают навстречу, в центре выпрыгивает бейдж VS. Победитель синим, проигравший красным.</p>
+          <span class="when"><b>Когда:</b> момент прямого столкновения двух игроков — дуэль, из-за которой зритель и пришёл.</span>
+          <div class="specs"><span class="spec">стороны <b>0,6 с</b></span><span class="spec">бейдж <b>0,4 с</b> пружинка</span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t7">
+        <div class="stage"><span class="badge">7 · СЧЁТЧИК</span>
+          <div class="counter">
+            <span class="digits"><span class="reel"><span>310</span><span>478</span><span>645</span><span>809</span><span>910</span></span></span>
+            <span class="unit">пиццерий</span>
+          </div>
+        </div>
+        <div class="body"><h3>Счётчик — число растёт на глазах</h3>
+          <p>Цифра «докручивается» до финального значения за секунду: быстро в начале, мягко тормозит в конце. Шрифт моноширинный — цифры не прыгают.</p>
+          <span class="when"><b>Когда:</b> динамика во времени: рост сети, падение выручки, «было → стало».</span>
+          <div class="specs"><span class="spec">докрутка <b>0,8–1 с</b></span><span class="spec">торможение в конце</span><span class="spec">моноширинные цифры</span></div>
+        </div>
+      </div>
+
+      <div class="mcard" id="t8">
+        <div class="stage"><span class="badge">8 · ШТОРКА</span>
+          <div class="wipe">
+            <div class="a">Глава 2 · Атака</div>
+            <div class="b">Глава 3 · Контрудар</div>
+          </div>
+        </div>
+        <div class="body"><h3>Шторка — смена главы</h3>
+          <p>Тёмный кадр «съезжает» поверх светлого справа налево и открывает новую главу. Быстро и чётко, без наворотов.</p>
+          <span class="when"><b>Когда:</b> переход между этапами войны. Даёт выпуску ритм и ощущение «глав», как в кино.</span>
+          <div class="specs"><span class="spec">шторка <b>0,5 с</b></span><span class="spec">разгон-торможение</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="move">
+  <div class="wrap">
+    <h2 style="margin-bottom:10px">Движение: «робот» против «живого»</h2>
+    <p class="muted" style="margin-bottom:8px;font-size:16px">Единственное техническое правило, которое нельзя нарушать. Посмотри на две точки — они бегают по-разному.</p>
     <div class="move-demo">
       <div class="md bad">
-        <div class="h">✕ Так НЕ надо — «робот»</div>
-        <div class="sub">Точка едет с одной скоростью и резко встаёт. Как конвейер.</div>
+        <div class="h">✕ «Робот» — запрещено</div>
+        <div class="sub">Едет с одной скоростью и резко встаёт. Как конвейер.</div>
         <div class="track linear"><i></i></div>
-        <div class="verdict">Выглядит дёшево и неживо. Это называется «linear» — запрещаем.</div>
+        <div class="verdict">Так двигается дешёвая графика. В программах это называется «linear».</div>
       </div>
       <div class="md good">
-        <div class="h">✓ Так надо — «живое»</div>
-        <div class="sub">Точка разгоняется и мягко тормозит. Как машина у светофора.</div>
+        <div class="h">✓ «Живое» — всегда так</div>
+        <div class="sub">Разгоняется и мягко тормозит. Как машина у светофора.</div>
         <div class="track alive"><i></i></div>
-        <div class="verdict">Выглядит дорого и плавно. Всё движение в роликах — только такое.</div>
+        <div class="verdict">Всё движение в наших роликах — только такое.</div>
       </div>
     </div>
-    <p class="muted" style="margin-top:18px;font-size:16px">Одна фраза для монтажёра: <b style="color:var(--ink)">«Никакого linear. Всё появляется с разгоном и мягко тормозит».</b> В профессиональных программах (After Effects, Premiere) это делается кнопкой «Easy Ease» или пресетом — монтажёр знает.</p>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2 style="margin-bottom:8px">Два режима картинки</h2>
-    <p class="muted" style="margin-bottom:18px">Канал живёт в двух состояниях. Меняется только плотность — правила и шрифт те же.</p>
-    <div class="modes">
-      <div class="mode a">
-        <div class="tag">Режим 1 · чаще всего</div>
-        <h3>Когда говорим мысль или цифру</h3>
-        <p>Пусто, крупно, спокойно. Так выглядит бóльшая часть ролика.</p>
-        <ul>
-          <li>Чистый белый или тёмный фон</li>
-          <li>Огромная цифра или короткая фраза</li>
-          <li>Один яркий блок как акцент</li>
-          <li>Тонкие подписи-выноски (например «5 GW · 4 км»)</li>
-        </ul>
-      </div>
-      <div class="mode b">
-        <div class="tag">Режим 2 · когда показываем данные</div>
-        <h3>Когда сравниваем или показываем карту</h3>
-        <p>Плотнее и ярче — но по правилам. Здесь можно цветные плашки.</p>
-        <ul>
-          <li>Цифра в цветной «наклейке» (плашке)</li>
-          <li>Ряд: флаг + столбик + сумма</li>
-          <li>Серая карта, нужная страна закрашена цветом</li>
-          <li>Метки-точки на карте с подписью</li>
-        </ul>
-      </div>
+    <div class="ae-note">
+      <b>Как включить в After Effects:</b> выдели ключевые кадры → правый клик → Keyframe Assistant → <span class="mono">Easy Ease</span> (или клавиша <span class="mono">F9</span>). Затем открой Graph Editor и вытяни кривую так, чтобы разгон был быстрым, а торможение — длинным. В Premiere: правый клик по ключевым кадрам → <span class="mono">Ease In / Ease Out</span>. Этого достаточно на 95% случаев.
     </div>
   </div>
 </section>
 
-<section>
+<section id="colors">
   <div class="wrap">
-    <h2 style="margin-bottom:18px">Цвета</h2>
+    <h2 style="margin-bottom:8px">Цвета: каждый цвет — это роль в войне</h2>
+    <p class="muted" style="margin-bottom:18px;font-size:16px">Не крась «для красоты». Цвет говорит зрителю, кто есть кто — без слов. В одном кадре максимум 2–3 цвета.</p>
     <div class="cols">
-      <div class="col"><div class="sw" style="background:#FFFFFF;border-bottom:1px solid #E4E7EC"></div><div class="info"><b>Белый / тёмный</b><span>фон · #FFFFFF / #0A0E14</span></div></div>
-      <div class="col"><div class="sw" style="background:#0A84FF"></div><div class="info"><b>Синий</b><span>победитель, главное</span></div></div>
-      <div class="col"><div class="sw" style="background:#27B24B"></div><div class="info"><b>Зелёный</b><span>рост, хорошо</span></div></div>
-      <div class="col"><div class="sw" style="background:#FF3B30"></div><div class="info"><b>Красный</b><span>падение, проигравший</span></div></div>
+      <div class="col"><div class="sw" style="background:#FFFFFF;border-bottom:1px solid #E4E7EC"></div><div class="info"><b>Белый / тёмный</b><span>фон кадра · #FFFFFF / #0A0E14</span></div></div>
+      <div class="col"><div class="sw" style="background:#0A84FF"></div><div class="info"><b>Синий</b><span>герой выпуска, победитель</span></div></div>
+      <div class="col"><div class="sw" style="background:#FF3B30"></div><div class="info"><b>Красный</b><span>проигравший, падение</span></div></div>
+      <div class="col"><div class="sw" style="background:#8E9AAB"></div><div class="info"><b>Серый</b><span>остальные игроки, фон-данные</span></div></div>
+      <div class="col"><div class="sw" style="background:#27B24B"></div><div class="info"><b>Зелёный</b><span>рост, деньги, выгода</span></div></div>
       <div class="col"><div class="sw" style="background:#FFC53D"></div><div class="info"><b>Жёлтый</b><span>регион на карте</span></div></div>
-      <div class="col"><div class="sw" style="background:#7B61FF"></div><div class="info"><b>Фиолетовый</b><span>метки, нейтральное</span></div></div>
+      <div class="col"><div class="sw" style="background:#7B61FF"></div><div class="info"><b>Фиолетовый</b><span>метки городов, нейтральное</span></div></div>
     </div>
   </div>
 </section>
 
-<section>
+<section id="check">
   <div class="wrap">
-    <h2 style="margin-bottom:18px">Короткий чек-лист «сделал / не сделал»</h2>
+    <h2 style="margin-bottom:18px">Чек-лист перед сдачей</h2>
     <div class="check">
-      <div class="row"><span class="ic y">✓</span><div class="t">На экране одна мысль, вокруг много воздуха</div></div>
-      <div class="row"><span class="ic y">✓</span><div class="t">Главная цифра — крупная</div></div>
-      <div class="row"><span class="ic y">✓</span><div class="t">Максимум 2–3 цвета, ярким — только важное</div></div>
-      <div class="row"><span class="ic y">✓</span><div class="t">Всё двигается плавно (с разгоном и мягким торможением)</div></div>
-      <div class="row"><span class="ic y">✓</span><div class="t">Один жирный шрифт везде</div></div>
-      <div class="row"><span class="ic n">✕</span><div class="t">Пять элементов в кадре разом</div></div>
-      <div class="row"><span class="ic n">✕</span><div class="t">Резкие «скачки», движение «робота» (linear)</div></div>
-      <div class="row"><span class="ic n">✕</span><div class="t">Кислотные, пёстрые цвета</div></div>
-      <div class="row"><span class="ic n">✕</span><div class="t">Рукописный шрифт в основной текст</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">В каждом кадре — одна мысль, одна цифра-герой</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Вокруг главного — пусто (поля от краёв минимум 8%)</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Синий = герой, красный = проигравший — роли не перепутаны</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Всё движение с разгоном и мягким торможением (Easy Ease)</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Один шрифт, цифры моноширинные</div></div>
+      <div class="row"><span class="ic y">✓</span><div class="t">Шок-цифра в первой минуте, цитата-мораль — одна, в финале</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Пять плашек в кадре разом</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Движение «linear», резкие скачки</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">График-«частокол» из 30 столбиков без выделенного вывода</div></div>
+      <div class="row"><span class="ic n">✕</span><div class="t">Кислотные цвета, рукописный шрифт в основном тексте</div></div>
     </div>
   </div>
 </section>
 
-<section style="border-bottom:none">
+<section id="specs" style="border-bottom:none">
   <div class="wrap">
-    <h2 style="margin-bottom:8px">Технические цифры (для монтажёра)</h2>
-    <p class="muted" style="margin-bottom:16px">Если делаешь сам — вот точные настройки. Нажми «Копировать» и вставь себе.</p>
+    <h2 style="margin-bottom:8px">Настройки проекта — скопируй себе</h2>
+    <p class="muted" style="margin-bottom:16px;font-size:16px">Точные значения для After Effects / Premiere. Кнопка «Копировать» — и вставляй.</p>
     <div class="copybox">
       <div class="top"><span>Настройки проекта</span><button id="copyBtn">Копировать</button></div>
-      <pre id="specText">Формат: 1920×1080, 25 кадров/сек
+      <pre id="specText">ПРОЕКТ
+Формат: 1920×1080, 25 кадров/сек
 Поля от краёв: не меньше 8% ширины
-Фон (режим 1): белый #FFFFFF или тёмный #0A0E14
+
+ФОН И ТЕКСТ
+Фон: белый #FFFFFF или тёмный #0A0E14
 Текст: #0A0E14 (на тёмном — #EAEEF5)
 
-ЦВЕТА ПО СМЫСЛУ
-Синий (главное/победитель): #0A84FF
-Зелёный (рост): #27B24B
-Красный (падение): #FF3B30
+ЦВЕТА-РОЛИ
+Синий (герой/победитель): #0A84FF
+Красный (проигравший/падение): #FF3B30
+Серый (остальные игроки): #8E9AAB
+Зелёный (рост/деньги): #27B24B
 Жёлтый (регион на карте): #FFC53D
-Фиолетовый (метки): #7B61FF
+Фиолетовый (метки городов): #7B61FF
 
 ШРИФТ
-SF Pro или Inter, жирность 800–850
-Цифры — моноширинные (JetBrains Mono), чтобы не прыгали
+SF Pro или Inter, жирность 800–850, трекинг −3%
+Цифры: моноширинные (JetBrains Mono), tabular
 
-ДВИЖЕНИЕ (никакого linear!)
-Текст/фразы: Easy Ease, 0,5–0,6 сек
-Столбики/счётчики/карты: 0,8–0,9 сек
-Плашки/метки (лёгкая пружинка): 0,4 сек</pre>
+ДВИЖЕНИЕ — никакого linear, всё через Easy Ease (F9)
+Текст, титры, цитаты: 0,5–0,6 сек
+Столбики, счётчики, карты: 0,8–0,9 сек
+Плашки, бейджи, метки (пружинка): 0,4 сек
+Шторка между главами: 0,5 сек
+
+ПРАВИЛА КАДРА
+Одна мысль на экран, максимум 2–3 цвета
+Шок-цифра — в первой минуте
+Цитата-мораль — одна за выпуск, в финале
+Столбиков в сравнении — не больше 4</pre>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    Битва за рынок · простое ТЗ по графике · версия для монтажёра.<br>
-    Основано на разборе роликов Droider (чистота) и Послезавтра (инфографика).
+    «Битва за рынок» · гайд по графике для монтажёра · v2.<br>
+    Стиль: чистота Droider/Apple + инфографика в духе «Послезавтра», приглушённая палитра.
   </div>
 </footer>
 
